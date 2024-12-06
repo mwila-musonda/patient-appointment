@@ -1,0 +1,130 @@
+/* Reset styles for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-image: url(../img/doc.jpg);
+    background-attachment: fixed;
+    background-size:cover;
+   
+}
+
+.full-height {
+    max-height: 100vh;
+    height: 100vh;
+}
+
+table {
+    width: 100%;
+}
+
+.heading-text {
+    color: white;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 63px;
+    text-align: center;
+    margin-top: 15%;
+}
+
+.sub-text2 {
+    color:white;
+    font-size: 27px;
+    line-height: 27px;
+    text-align: center;
+    margin-top: 400px;
+
+}
+
+/* Navbar Buttons (Login and Register) */
+.nav-btn {
+    background-color: rgba(240, 248, 255, 0.8);
+    color: #345cc4;
+    border-radius: 4px;
+    padding: 12px 20px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background-color: #2980b9;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.primary-btn:hover {
+    background-color: #21618c;
+}
+
+/* Button for Booking Appointment */
+.book-appointment-btn {
+    margin-top: 30px;
+    background-color: #28a745; /* Green for primary action */
+    color: white;
+    font-size: 18px;
+    padding: 15px 25px;
+    font-weight: bold;
+}
+
+.book-appointment-btn:hover {
+    background-color: #1e7e34;
+}
+
+/* Logo text */
+.edoc-logo-sub {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+.footer-hashen {
+    position: absolute;
+    bottom: 0;
+    left: 45%;
+    font-size: 13px;
+}
+
+nav .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 75px;
+    background: #2980b9;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav .navbar .logo a {
+    color: #fff;
+    font-size: 27px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+nav .navbar .menu {
+    display: flex;
+}
+
+.navbar .menu li {
+    list-style: none;
+    margin: 0 15px;
+}
+
+.navbar .menu li a {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+}

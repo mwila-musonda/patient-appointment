@@ -38,6 +38,7 @@
 
     //import database
     include("../connection.php");
+    error_reporting(0); //This this just for hiding some stuborn warns
 
     
     ?>
@@ -53,7 +54,7 @@
                                 </td>
                                 <td style="padding:0px;margin:0px;">
                                     <p class="profile-title">Administrator</p>
-                                    <p class="profile-subtitle">admin@edoc.com</p>
+                                    <p class="profile-subtitle">Webby</p>
                                 </td>
                             </tr>
                             <tr>

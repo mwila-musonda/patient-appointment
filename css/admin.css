@@ -10,6 +10,7 @@
     width: 21%;
     height: 100vh;
     box-shadow: 0 0px 0px 2px rgba(240, 240, 240, 0.3);
+    background-color:#e1e2e2;
 }
 .dash-body{
     width: 79%;
@@ -33,7 +34,7 @@
 
 .profile-subtitle{
     font-weight: 300;
-    color: #8492a6;
+    color: #161c2d;
     font-size: 15px;
     margin: 0;
     text-align: left;

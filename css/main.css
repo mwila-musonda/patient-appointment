@@ -400,7 +400,7 @@ input[type=search]:focus {
 
 
 .menu-icon-dashbord:hover,.menu-icon-dashbord-active{
-  color: var(--primarycolor);
+  color: #1d2228;
 
   background-image: url('../img/icons/dashboard-hover.svg');
 }

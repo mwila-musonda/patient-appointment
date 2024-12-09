@@ -85,11 +85,7 @@
                         <a href="appointment.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Appointment</p></a></div>
                     </td>
                 </tr>
-                <tr class="menu-row" >
-                    <td class="menu-btn menu-icon-schedule">
-                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">Schedule</p></div></a>
-                    </td>
-                </tr>
+               
                 <tr class="menu-row">
                     <td class="menu-btn menu-icon-specialties">
                         <a href="specialties.php" class="non-style-link-menu"><div><p class="menu-text">Specialties</p></a></div>

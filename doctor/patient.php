@@ -59,7 +59,7 @@
                                     <img src="../img/user.png" alt="" width="100%" style="border-radius:50%">
                                 </td>
                                 <td style="padding:0px;margin:0px;">
-                                    <p class="profile-title"><?php echo substr($username,0,13)  ?>..</p>
+                                    <p class="profile-title"><?php echo substr($username,0,20)  ?></p>
                                     <p class="profile-subtitle"><?php echo substr($useremail,0,22)  ?></p>
                                 </td>
                             </tr>
@@ -81,6 +81,11 @@
                         <a href="appointment.php" class="non-style-link-menu"><div><p class="menu-text">My Appointments</p></a></div>
                     </td>
                 </tr>
+                <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-schedule ">
+                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Schedule</p></div></a>
+                    </td>
+                </tr>
                 
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-session">
@@ -90,6 +95,11 @@
                 <tr class="menu-row" >
                     <td class="menu-btn menu-icon-patient menu-active menu-icon-patient-active">
                         <a href="patient.php" class="non-style-link-menu  non-style-link-menu-active"><div><p class="menu-text">My Patients</p></a></div>
+                    </td>
+                </tr>
+                </tr><tr class="menu-row" >
+                    <td class="menu-btn menu-icon-feedback">
+                        <a href="feeback.php" class="non-style-link-menu"><div><p class="menu-text">Patient Feedback</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >

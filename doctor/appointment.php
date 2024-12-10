@@ -91,6 +91,16 @@
                     </td>
                 </tr>
                 <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-schedule">
+                        <a href="schedule.php" class="non-style-link-menu"><div><p class="menu-text">My Schedule</p></div></a>
+                    </td>
+                </tr>
+                </tr><tr class="menu-row" >
+                    <td class="menu-btn menu-icon-feedback">
+                        <a href="feeback.php" class="non-style-link-menu"><div><p class="menu-text">Patient Feedback</p></div></a>
+                    </td>
+                </tr>
+                <tr class="menu-row" >
                     <td class="menu-btn menu-icon-settings">
                         <a href="settings.php" class="non-style-link-menu"><div><p class="menu-text">Settings</p></a></div>
                     </td>

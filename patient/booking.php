@@ -143,12 +143,16 @@ $username = $userfetch["pname"];
                                     </thead>
                                     <tbody>
     <?php
-            $sqlmain = "SELECT * FROM doctor d 
-                    LEFT JOIN schedule s ON s.docid = d.docid
-                    LEFT JOIN specialties s2 ON s2.id = d.specialties";
+            $sqlmain = "SELECT d.specialties, MAX(d.docid) AS docid, MAX(d.docname) AS docname, 
+                        MAX(s.title) AS title, MAX(s2.sname) as sname, MAX(s.scheduleid) as scheduleid,MAX(s.nop) as nop
+                        FROM doctor d
+                        LEFT JOIN schedule s ON s.docid = d.docid
+                        LEFT JOIN specialties s2 ON s2.id = d.specialties
+                        WHERE s.docid IS NOT NULL AND s.title IS NOT NULL
+                        GROUP BY d.specialties";
 
                 $result = $database->query($sqlmain);
-                
+              
                 if ($result->num_rows == 0) {
                     echo '<tr><td colspan="5">No results found!</td></tr>';
                 } else {
@@ -188,40 +192,68 @@ $username = $userfetch["pname"];
         if (isset($_POST["submit"])) {
             $scheduleid = $_POST["scheduleid"];
             $dofapps = $_POST["dofapp"]; // This is now an array
-            foreach ($dofapps as $dofapp) {
-                $uniqueNumber = generateUniqueNumber($database, 10, 100);
-                
-                // Insert each appointment
-                $sql = "INSERT INTO appointment (pid, apponum, scheduleid, appodate) 
-                        VALUES ('$userid', '$uniqueNumber', '$scheduleid', '$dofapp')";
+            
+            // Get the current `nop` for the selected schedule
+            $esql = "SELECT nop FROM hospital.schedule WHERE scheduleid = '$scheduleid'";
+            $run = $database->query($esql);
+            if ($run && $row = $run->fetch_assoc()) {
+                $currentNop = $row['nop'];
         
-                if (!$database->query($sql)) {
-                    echo "Error: " . $database->error;
+                // Check if `nop` is 0 or negative
+                if ($currentNop <= 0) {
+                    echo "<script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fully Booked',
+                            text: 'The doctor is fully booked for this session. Please try later.'
+                        });
+                    </script>";
                 } else {
-                    // Reduce the number of patients (nop) in the schedule
-                    $esql = "SELECT nop FROM hospital.schedule WHERE scheduleid= '$scheduleid'";
-                    $run = $database->query($esql);
-                    if ($row = $run->fetch_assoc()) {
-                        $reduceNop = $row['nop'] - 1;
+                    foreach ($dofapps as $dofapp) {
+                        $uniqueNumber = generateUniqueNumber($database, 10, 100);
+                        
+                        // Insert each appointment
+                        $sql = "INSERT INTO appointment (pid, apponum, scheduleid, appodate) 
+                                VALUES ('$userid', '$uniqueNumber', '$scheduleid', '$dofapp')";
         
-                        // Update `nop` in the schedule table
-                        $updateSql = "UPDATE hospital.schedule SET nop = '$reduceNop' WHERE scheduleid = '$scheduleid'";
-                        $database->query($updateSql);
+                        if (!$database->query($sql)) {
+                            echo "Error: " . $database->error;
+                        } else {
+                            // Reduce the number of patients (nop) in the schedule
+                            $reduceNop = $currentNop - 1;
+                            $updateSql = "UPDATE hospital.schedule SET nop = '$reduceNop' WHERE scheduleid = '$scheduleid'";
+                            $database->query($updateSql);
+                            
+                            // Success message with SweetAlert
+                            echo "<script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Appointment successfully created!'
+                                }).then(() => {
+                                    window.location.href = 'appointment.php';
+                                });
+                            </script>";
+                        }
         
-                        // Success message with SweetAlert
-                        echo "<script>
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'Appointment successfully created!'
-                            }).then(() => {
-                                window.location.href = 'appointment.php';
-                            });
-                        </script>";
+                        // Update `currentNop` for subsequent iterations
+                        $currentNop--;
+                        if ($currentNop <= 0) {
+                            break;
+                        }
                     }
                 }
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to fetch schedule information. Please try again later.'
+                    });
+                </script>";
             }
         }
+        
         
     ?>    
 </tbody>

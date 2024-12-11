@@ -21,13 +21,16 @@
 <body>
     <?php
 
-    //learn from w3schools.com
+   
 
     session_start();
 
     if(isset($_SESSION["user"])){
         if(($_SESSION["user"])=="" or $_SESSION['usertype']!='d'){
             header("location: ../login.php");
+        }else{
+            $useremail = $_SESSION["user"];
+            
         }
 
     }else{
@@ -35,9 +38,11 @@
     }
     
     
-
    
     include("../connection.php");
+    $userrow = $database->query("SELECT * FROM doctor d WHERE d.docemail ='$useremail'");
+    $userfetch = $userrow->fetch_assoc();
+    $userid = $userfetch["docid"];
 
     
     ?>
@@ -90,7 +95,16 @@
                         <a href="patient.php" class="non-style-link-menu"><div><p class="menu-text"> My Patients</p></a></div>
                     </td>
                 </tr>
-
+                </tr><tr class="menu-row" >
+                    <td class="menu-btn menu-icon-feedback">
+                        <a href="feeback.php" class="non-style-link-menu"><div><p class="menu-text">Patient Feedback</p></div></a>
+                    </td>
+                </tr>
+                <tr class="menu-row" >
+                    <td class="menu-btn menu-icon-settings  menu-active menu-icon-settings-active">
+                        <a href="settings.php" class="non-style-link-menu non-style-link-menu-active"><div><p class="menu-text">Settings</p></a></div>
+                    </td>
+                </tr>
             </table>
         </div>
         <div class="dash-body">
@@ -115,7 +129,10 @@
                         $today = date('Y-m-d');
                         echo $today;
 
-                        $list110 = $database->query("select  * from  schedule;");
+                        $mySechudeles = $database->query("SELECT schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,
+                                                        schedule.scheduletime,schedule.nop from schedule
+                                                        inner join doctor on schedule.docid=doctor.docid 
+                                                        where doctor.docid = '{$userid}' order by schedule.scheduledate desc");
 
                         ?>
                         </p>
@@ -139,7 +156,7 @@
                 <tr>
                     <td colspan="4" style="padding-top:10px;width: 100%;" >
                     
-                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">All Sessions (<?php echo $list110->num_rows; ?>)</p>
+                        <p class="heading-main12" style="margin-left: 45px;font-size:18px;color:rgb(49, 49, 49)">All Sessions (<?php echo $mySechudeles->num_rows; ?>)</p>
                     </td>
                     
                 </tr>
@@ -160,7 +177,7 @@
                             <input type="date" name="sheduledate" id="date" class="input-text filter-container-items" style="margin: 0;width: 95%;">
 
                         </td>
-                        <td width="5%" style="text-align: center;">
+                        <!-- <td width="5%" style="text-align: center;">
                         Doctor:
                         </td>
                         <td width="30%">
@@ -169,8 +186,8 @@
                                 
                             <?php 
                             
-                                $list11 = $database->query("select  * from  doctor order by docname asc;");
-
+                                $list11 = $database->query("SELECT  * from  doctor where docid = '$userid'");
+                                echo '<input type="date" name="sheduledate" id="date" class="input-text filter-container-items" style="margin: 0;width: 95%;">';
                                 for ($y=0;$y<$list11->num_rows;$y++){
                                     $row00=$list11->fetch_assoc();
                                     $sn=$row00["docname"];
@@ -179,7 +196,7 @@
                                 };
 
 
-                                ?>
+                                ?> -->
 
                         </select>
                     </td>
@@ -230,7 +247,10 @@
                         
                         //
                     }else{
-                        $sqlmain= "select schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,schedule.scheduletime,schedule.nop from schedule inner join doctor on schedule.docid=doctor.docid  order by schedule.scheduledate desc";
+                        $sqlmain= "SELECT schedule.scheduleid,schedule.title,doctor.docname,schedule.scheduledate,
+                                    schedule.scheduletime,schedule.nop from schedule
+                                    inner join doctor on schedule.docid=doctor.docid 
+                            where doctor.docid = '{$userid}' order by schedule.scheduledate desc";
 
                     }
 
@@ -388,25 +408,14 @@
                                 </td>
                             </tr>
                             <tr>
-                                
-                                <td class="label-td" colspan="2">
-                                    <label for="docid" class="form-label">Select Doctor: </label>
-                                </td>
-                            </tr>
                             <tr>
-                                <td class="label-td" colspan="2">
-                                    <select name="docid" id="" class="box" >
-                                    <option value="" disabled selected hidden>Choose Doctor Name from the list</option><br/>';
-                                        
-        
-                                        $list11 = $database->query("select  * from  doctor order by docname asc;");
-        
-                                        for ($y=0;$y<$list11->num_rows;$y++){
-                                            $row00=$list11->fetch_assoc();
-                                            $sn=$row00["docname"];
-                                            $id00=$row00["docid"];
-                                            echo "<option value=".$id00.">$sn</option><br/>";
-                                        };
+                                <td class="label-td" colspan="2">';
+                                $sql = $database->query("SELECT * FROM doctor WHERE docid = '$userid'");
+                                if ($result = $sql->fetch_assoc()) {
+                                    $name = $result["docname"];
+                                    $id = $result["docid"];
+                                    echo '<input type="hidden" name="docid" value="' . $id . '">';
+                                }
         
         
         

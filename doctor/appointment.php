@@ -97,7 +97,7 @@
                 </tr>
                 </tr><tr class="menu-row" >
                     <td class="menu-btn menu-icon-feedback">
-                        <a href="feeback.php" class="non-style-link-menu"><div><p class="menu-text">Patient Feedback</p></div></a>
+                        <a href="feedback.php" class="non-style-link-menu"><div><p class="menu-text">Patient Feedback</p></div></a>
                     </td>
                 </tr>
                 <tr class="menu-row" >

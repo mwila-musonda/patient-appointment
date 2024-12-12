@@ -201,7 +201,7 @@
                                         <table class="filter-container" style="border: none;" border="0">
                                             <tr>
                                                 <td colspan="4">
-                                                    <p style="font-size: 20px;font-weight:600;padding-left: 12px;">Doctor's FeedBack</p>
+                                                    <p style="font-size: 20px;font-weight:600;padding-left: 12px;">Announcemnts</p>
                                                 </td>
                                             </tr>
                                                 <td style="width: 25%;">

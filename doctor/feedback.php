@@ -188,67 +188,29 @@
                         </thead>
                         <tbody>
                         
-                            <?php
+                          <?php
+                           $sql = $database->query("SELECT * from appointment 
+                                                   inner join patient on patient.pid=appointment.pid 
+                                                    inner join schedule on schedule.scheduleid=appointment.scheduleid
+                                                    inner join feedback on feedback.docid =schedule.scheduleid
+                                                    where feedback.docid = $userid");
+                           $run = $sql->fetch_assoc();
 
-                                // $sqlmain = ""
-                                // $result= $database->query($sqlmain);
+                           if($run->num_rows > 0){
+                            while($row = $run->fetch_assoc()){
+                                $feedback = $row["doctorFeeback"];
+                                $session = $row["title"];
+                                $pname = $row["pname"];
+                                $no = $row["apponum"];
+                            
+                                echo '<tr></tr>'
 
-                                // if($result->num_rows==0){
-                                //     echo '<tr>
-                                //     <td colspan="4">
-                                //     <br><br><br><br>
-                                //     <center>
-                                //     <img src="../img/notfound.svg" width="25%">
-                                    
-                                //     <br>
-                                //     <p class="heading-main12" style="margin-left: 45px;font-size:20px;color:rgb(49, 49, 49)">We  couldnt find anything related to your keywords !</p>
-                                //     <a class="non-style-link" href="doctors.php"><button  class="login-btn btn-primary-soft btn"  style="display: flex;justify-content: center;align-items: center;margin-left:20px;">&nbsp; Show all Doctors &nbsp;</font></button>
-                                //     </a>
-                                //     </center>
-                                //     <br><br><br><br>
-                                //     </td>
-                                //     </tr>';
-                                    
-                                // }
+                            }
+                              
+                           }
+                           
 
-
-
-                            //     else{
-                            //     for ( $x=0; $x<$result->num_rows;$x++){
-                            //         $row=$result->fetch_assoc();
-                            //         $docid=$row["docid"];
-                            //         $name=$row["docname"];
-                            //         $email=$row["docemail"];
-                            //         $spe=$row["specialties"];
-                            //         $spcil_res= $database->query("select sname from specialties where id='$spe'");
-                            //         $spcil_array= $spcil_res->fetch_assoc();
-                            //         $spcil_name=$spcil_array["sname"];
-                            //         echo '<tr>
-                            //             <td> &nbsp;'.
-                            //             substr($name,0,30)
-                            //             .'</td>
-                            //             <td>
-                            //             '.substr($email,0,20).'
-                            //             </td>
-                            //             <td>
-                            //                 '.substr($spcil_name,0,20).'
-                            //             </td>
-
-                            //             <td>
-                            //             <div style="display:flex;justify-content: center;">
-                            //             <a href="?action=edit&id='.$docid.'&error=0" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-edit"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Edit</font></button></a>
-                            //             &nbsp;&nbsp;&nbsp;
-                            //             <a href="?action=view&id='.$docid.'" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-view"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">View</font></button></a>
-                            //            &nbsp;&nbsp;&nbsp;
-                            //            <a href="?action=drop&id='.$docid.'&name='.$name.'" class="non-style-link"><button  class="btn-primary-soft btn button-icon btn-delete"  style="padding-left: 40px;padding-top: 12px;padding-bottom: 12px;margin-top: 10px;"><font class="tn-in-text">Remove</font></button></a>
-                            //             </div>
-                            //             </td>
-                            //         </tr>';
-                                    
-                            //     }
-                            // }
-                                 
-                             ?>
+                          ?>
  
                             </tbody>
 
@@ -391,111 +353,126 @@
             </div>
             </div>
             ';
-        }elseif($action=='add'){
-                $error_1=$_GET["error"];
-                $errorlist= array(
-                    '1'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>',
-                    '2'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Conformation Error! Reconform Password</label>',
-                    '3'=>'<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>',
-                    '4'=>"",
-                    '0'=>'',
-
-                );
-                if($error_1!='4'){
+        }elseif($action == 'add') {
+            $error_1 = $_GET["error"];
+            $errorlist = array(
+                '1' => '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Already have an account for this Email address.</label>',
+                '2' => '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;">Password Confirmation Error! Reconfirm Password.</label>',
+                '3' => '<label for="promter" class="form-label" style="color:rgb(255, 62, 62);text-align:center;"></label>',
+                '4' => "",
+                '0' => '',
+            );
+            
+            if ($error_1 != '4') {
                 echo '
-                    <div id="popup1" class="overlay">
+                <div id="popup1" class="overlay">
+                <div class="popup">
+                <center>
+                <a class="close" href="doctors.php">&times;</a>
+                <div style="display: flex; justify-content: center;">
+                <div class="abc">
+                <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
+                <tr>
+                    <td class="label-td" colspan="2">'.
+                        $errorlist[$error_1]
+                    .'</td>
+                </tr>
+                <tr>
+                    <td>
+                        <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Give Feedback</p><br><br>
+                    </td>
+                </tr>
+                <form action="add-feedback.php" method="POST" class="add-new-form">
+                <tr>
+                    <td class="label-td" colspan="2">
+                        <label for="feedback" class="form-label">Choose your patient:</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-td" colspan="2">
+                        <select name="pid" id="" class="box" style="margin:8px; size:30px;">';
+                        $sql = $database->query("SELECT patient.pid, CONCAT(UPPER(patient.pname), '-', '(', schedule.title, '-', appointment.apponum, ')') AS pname
+                                                FROM appointment
+                                                INNER JOIN patient ON patient.pid = appointment.pid
+                                                INNER JOIN schedule ON schedule.scheduleid = appointment.scheduleid
+                                                WHERE schedule.docid = $userid");
+        
+                        while ($result = $sql->fetch_assoc()) {
+                            $patientName = $result["pname"];
+                            $patientId = $result["pid"];
+                            echo "<option value=".$patientId.">$patientName</option><br/>";
+                        }
+                echo '       
+                        </select><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-td" colspan="2">
+                        <label for="feedback" class="form-label">Feedback:</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-td" colspan="2">
+                        <textarea rows="3" type="text" name="feedback" class="input-text" placeholder="Type here...." required></textarea><br>
+                    </td>
+                </tr>
+                <tr>';
+                // Correct SQL to fetch appointment information
+                $sql = $database->query("SELECT * FROM appointment
+                                        INNER JOIN patient ON patient.pid = appointment.pid
+                                        INNER JOIN schedule ON schedule.scheduleid = appointment.scheduleid
+                                        WHERE schedule.docid = $userid");
+                $result = $sql->fetch_assoc();
+           
+                $apponum = $result["apponum"];
+                $pid = $result["pid"];
+                $title = $result["title"];
+                $docid = $result["docid"];
+                
+                echo '
+                    <td><input type="hidden" name="apponum" value="'.$apponum.'"></td>
+                    <td><input type="hidden" name="title" value="'.$title.'"></td>
+                    <td><input type="hidden" name="docid" value="'.$docid.'"></td>
+                </tr>
+               <tr>
+    <td colspan="2" style="text-align:center;">
+        <input type="submit" value="Submit" class="login-btn btn-primary btn" style="font-size:20px;margin:10px; padding: 10px 20px; display:inline-block;">
+    </td>
+</tr>
+
+                </form>
+                </table>
+                </div>
+                </div>
+                </center>
+                <br><br>
+                </div>
+                </div>';
+            } else {
+                echo '
+                <div id="popup1" class="overlay">
                     <div class="popup">
                     <center>
-                    
-                        <a class="close" href="doctors.php">&times;</a> 
-                        <div style="display: flex;justify-content: center;">
-                        <div class="abc">
-                        <table width="80%" class="sub-table scrolldown add-doc-form-container" border="0">
-                        <tr>
-                                <td class="label-td" colspan="2">'.
-                                    $errorlist[$error_1]
-                                .'</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <p style="padding: 0;margin: 0;text-align: left;font-size: 25px;font-weight: 500;">Give Feedback</p><br><br>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                        <form action="add-new.php" method="POST" class="add-new-form">
-                            
-                              </tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="feeback" class="form-label">Choose your patient : </label>
-                                </td>
-                            </tr>
-                                        <td class="label-td" colspan="2">
-                                            <select name="pid" id="" class="box" style="margin:8px;size:30px;">';
-                                                $list11 = $database->query("select  * from  specialties order by sname asc;");
-                    
-                                                for ($y=0;$y<$list11->num_rows;$y++){
-                                                        $row00=$list11->fetch_assoc();
-                                                        $sn=$row00["sname"];
-                                                        $id00=$row00["id"];
-                                                        echo "<option value=".$id00.">$sn</option><br/>";
-                                                }
-                                echo     '       </select><br>
-                                </td>
-                            </tr>
-                                <td class="label-td" colspan="2">
-                                    <label for="feeback" class="form-label">FeedBack: </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="label-td" colspan="2">
-                                    <textarea rows="3" type="text" name="feedback" class="input-text" placeholder="Type here...." required></textarea><br>
-                                </td>
-                                
-                            </tr>
-                
-                            <tr>
-                                <td colspan="2">
-                                    <input type="submit" value="Submit" class="login-btn btn-primary btn" style ="size:20px;margin:10px;" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                </td>
-                
-                            </tr>
-                           
-                            </form>
-                            </tr>
-                        </table>
+                    <br><br><br><br>
+                        <h2>New Record Added Successfully!</h2>
+                        <a class="close" href="feedback.php">&times;</a>
+                        <div class="content">
                         </div>
+                        <div style="display: flex; justify-content: center;">
+                            <a href="doctors.php" class="non-style-link">
+                                <button class="btn-primary btn" style="display: flex; justify-content: center; align-items: center; margin:10px; padding:10px;">
+                                    <font class="tn-in-text">&nbsp;&nbsp;OK&nbsp;&nbsp;</font>
+                                </button>
+                            </a>
                         </div>
+                        <br><br>
                     </center>
-                    <br><br>
-            </div>
-            </div>
-            ';
-
-            }else{
-                echo '
-                    <div id="popup1" class="overlay">
-                            <div class="popup">
-                            <center>
-                            <br><br><br><br>
-                                <h2>New Record Added Successfully!</h2>
-                                <a class="close" href="doctors.php">&times;</a>
-                                <div class="content">
-                                    
-                                    
-                                </div>
-                                <div style="display: flex;justify-content: center;">
-                                
-                                <a href="doctors.php" class="non-style-link"><button  class="btn-primary btn"  style="display: flex;justify-content: center;align-items: center;margin:10px;padding:10px;"><font class="tn-in-text">&nbsp;&nbsp;OK&nbsp;&nbsp;</font></button></a>
-
-                                </div>
-                                <br><br>
-                            </center>
                     </div>
-                    </div>
-        ';
+                </div>';
             }
-        }elseif($action=='edit'){
+        }
+        
+        elseif($action=='edit'){
             $sqlmain= "select * from doctor where docid='$id'";
             $result= $database->query($sqlmain);
             $row=$result->fetch_assoc();
